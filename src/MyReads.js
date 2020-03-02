@@ -1,10 +1,19 @@
+import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Shelf from "./Shelf";
+import Grid from "./Grid";
 
 class MyReads extends Component {
+  static propTypes = {
+    myReads: PropTypes.array.isRequired
+  };
+
   render() {
-    const {currentlyReading, wantToRead, read} = this.props.myReads;
+    const { myReads, update } = this.props;
+    const currentlyReading = myReads.filter(book => book.shelf === "currentlyReading");
+    const wantToRead = myReads.filter(book => book.shelf === "wantToRead");
+    const read = myReads.filter(book => book.shelf === "read");
+
     return (
       <div className="list-books">
         <div className="list-books-title">
@@ -12,17 +21,28 @@ class MyReads extends Component {
         </div>
         <div className="list-books-content">
           <div>
-            <Shelf shelfName="Currently Reading" books={currentlyReading} />
-            <Shelf shelfName="Want To Read" books={wantToRead} />
-            <Shelf shelfName="Read" books={read} />
+            <div className="bookshelf">
+              <h2 className="bookshelf-title">Currently Reading</h2>
+              <Grid books={currentlyReading} update={update} />
+            </div>
+            <div className="bookshelf">
+              <h2 className="bookshelf-title">Want To Read</h2>
+              <Grid books={wantToRead} update={update} />
+            </div>
+            <div className="bookshelf">
+              <h2 className="bookshelf-title">Read</h2>
+              <Grid books={read} update={update} />
+            </div>
           </div>
         </div>
         <div className="open-search">
-          <Link className='open-search-button' to="/search">Add a book</Link>
+          <Link className="open-search-button" to="/search">
+            Add a book
+          </Link>
         </div>
       </div>
     );
   }
 }
 
-export default MyReads
+export default MyReads;

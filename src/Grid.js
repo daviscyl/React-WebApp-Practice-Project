@@ -1,20 +1,20 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-class Shelf extends Component {
+class Grid extends Component {
   static propTypes = {
-    shelfName: PropTypes.string.isRequired,
-    books: PropTypes.array.isRequired
+    books: PropTypes.array.isRequired,
+    update: PropTypes.func.isRequired
   };
 
   render() {
+    const { books, update } = this.props;
     return (
-      <div className="bookshelf">
-        <h2 className="bookshelf-title">{this.props.shelfName}</h2>
-        <div className="bookshelf-books">
-          <ol className="books-grid">
-            {this.props.books.map(book => (
-              <li>
+      <div className="bookshelf-books">
+        <ol className="books-grid">
+          {books.map(book =>
+            "imageLinks" in book ? (
+              <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
                     <div
@@ -22,11 +22,11 @@ class Shelf extends Component {
                       style={{
                         width: 128,
                         height: 193,
-                        backgroundImage: `url("${book.coverURL}")`
+                        backgroundImage: `url("${book.imageLinks.smallThumbnail}")`
                       }}
                     ></div>
                     <div className="book-shelf-changer">
-                      <select>
+                      <select defaultValue={"shelf" in book ? book.shelf : "none"} onChange={e => update(book, e.target.value)}>
                         <option value="move" disabled>
                           Move to...
                         </option>
@@ -41,12 +41,12 @@ class Shelf extends Component {
                   <div className="book-authors">{book.authors}</div>
                 </div>
               </li>
-            ))}
-          </ol>
-        </div>
+            ) : null
+          )}
+        </ol>
       </div>
     );
   }
 }
 
-export default Shelf;
+export default Grid;
