@@ -32,7 +32,11 @@ class Search extends Component {
               onChange={e => {
                 const q = e.target.value.trim();
                 this.setState({ query: q });
-                q && BooksAPI.search(q).then(r => this.setState({ results: "error" in r ? [] : r }));
+                if (q) {
+                  BooksAPI.search(q).then(r => this.setState({ results: "error" in r ? [] : r }));
+                } else {
+                  this.setState({ results: [] });
+                }
               }}
             />
           </div>
