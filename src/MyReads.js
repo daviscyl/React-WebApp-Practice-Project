@@ -5,14 +5,14 @@ import Grid from "./Grid";
 
 class MyReads extends Component {
   static propTypes = {
-    myReads: PropTypes.array.isRequired
+    myReads: PropTypes.object.isRequired
   };
 
   render() {
     const { myReads, update } = this.props;
-    const currentlyReading = myReads.filter(book => book.shelf === "currentlyReading");
-    const wantToRead = myReads.filter(book => book.shelf === "wantToRead");
-    const read = myReads.filter(book => book.shelf === "read");
+    const currentlyReading = Object.values(myReads).filter(book => book.shelf === "currentlyReading");
+    const wantToRead = Object.values(myReads).filter(book => book.shelf === "wantToRead");
+    const read = Object.values(myReads).filter(book => book.shelf === "read");
 
     return (
       <div className="list-books">

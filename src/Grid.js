@@ -13,7 +13,7 @@ class Grid extends Component {
       <div className="bookshelf-books">
         <ol className="books-grid">
           {books.map(book =>
-            "imageLinks" in book ? (
+            "imageLinks" in book && "title" in book && "authors" in book ? (
               <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
@@ -26,7 +26,10 @@ class Grid extends Component {
                       }}
                     ></div>
                     <div className="book-shelf-changer">
-                      <select defaultValue={"shelf" in book ? book.shelf : "none"} onChange={e => update(book, e.target.value)}>
+                      <select
+                        defaultValue={"shelf" in book ? book.shelf : "none"}
+                        onChange={e => update(book, e.target.value)}
+                      >
                         <option value="move" disabled>
                           Move to...
                         </option>

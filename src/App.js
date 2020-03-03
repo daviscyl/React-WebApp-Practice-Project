@@ -10,16 +10,26 @@ import Search from "./Search";
 
 class BooksApp extends React.Component {
   state = {
-    myReads: []
+    myReads: {}
   };
 
   componentDidMount() {
-    BooksAPI.getAll().then(myReads => this.setState({ myReads }));
+    BooksAPI.getAll()
+      .then(books =>
+        books.reduce((res, book) => {
+          res[book.id] = book;
+          return res;
+        }, {})
+      )
+      .then(res => this.setState({ myReads: res }));
   }
 
   update = (book, shelf) => {
-    book.shelf = shelf;
-    this.setState(state => ({ myReads: state.myReads.filter(b => b.id !== book.id).concat([book]) }));
+    this.setState(state => {
+      book.shelf = shelf;
+      state.myReads[book.id] = book;
+      return state.myReads;
+    });
     BooksAPI.update(book, shelf);
     switch (shelf) {
       case "currentlyReading":
@@ -41,7 +51,7 @@ class BooksApp extends React.Component {
     return (
       <div className="app">
         <Route exact path="/" render={() => <MyReads myReads={this.state.myReads} update={this.update} />} />
-        <Route path="/search" render={() => <Search update={this.update} />} />
+        <Route path="/search" render={() => <Search myReads={this.state.myReads} update={this.update} />} />
         <NotificationContainer />
       </div>
     );

@@ -32,7 +32,17 @@ class Search extends Component {
                 const q = e.target.value.trim();
                 this.setState({ query: q });
                 if (q) {
-                  BooksAPI.search(q).then(r => this.setState({ results: "error" in r ? [] : r }));
+                  BooksAPI.search(q).then(r =>
+                    this.setState({
+                      results:
+                        "error" in r
+                          ? []
+                          : r.map(book => {
+                              const myReads = this.props.myReads;
+                              return book.id in myReads ? myReads[book.id] : book;
+                            })
+                    })
+                  );
                 } else {
                   this.setState({ results: [] });
                 }
