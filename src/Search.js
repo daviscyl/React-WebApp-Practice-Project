@@ -28,7 +28,6 @@ class Search extends Component {
             <input
               type="text"
               placeholder="Search by title or author"
-              value={this.state.query}
               onChange={e => {
                 const q = e.target.value.trim();
                 this.setState({ query: q });
